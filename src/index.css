@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  /* ── Paleta Colombia ────────────────────────────────────────────
+     Inspirada en la bandera y la geografía del país:
+     Azul (mares, ríos) · Oro (riqueza, soberanía) · Rojo (pasión)
+     + Verde selva (biodiversidad) · Crema cálida (tierra tropical)
+  ─────────────────────────────────────────────────────────────── */
+  --color-primary:        #0052A5;   /* Azul Colombia — confianza, profundidad  */
+  --color-primary-light:  #0066CC;   /* hover states                            */
+  --color-primary-dark:   #003A75;   /* active / pressed                        */
+  --color-gold:           #FCD116;   /* Amarillo bandera — soberanía, calidez   */
+  --color-gold-dark:      #D4A800;   /* gold hover                              */
+  --color-crimson:        #CE1126;   /* Rojo bandera — usado solo en accents    */
+  --color-selva:          #1A7A4A;   /* Verde selva — naturaleza, biodiversidad */
+  --color-selva-light:    #22A05A;   /* verde claro                             */
+
+  /* Border radii */
+  --radius-xl:  1rem;
+  --radius-2xl: 1.5rem;
+
+  /* Fonts */
+  --font-display: 'Fraunces', Georgia, serif;
+  --font-sans:    'Mulish', system-ui, sans-serif;
+}
+
+/* ─── Base resets ──────────────────────────────────────────────── */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  min-height: 100vh;
+  font-family: 'Mulish', system-ui, -apple-system, sans-serif;
+  background-color: #FFFDF5;   /* crema cálida tropical, no frío gris-azul */
+  color: #1a2035;
+}
+
+/* ─── Utility: hide scrollbar while keeping scroll behaviour ────── */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}

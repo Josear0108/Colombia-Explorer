@@ -1,0 +1,101 @@
+{
+  "common": {
+    "loading": "Loading…"
+  },
+  "nav": {
+    "home": "Home",
+    "destinations": "Destinations",
+    "experiences": "Experiences",
+    "about": "About"
+  },
+  "aria": {
+    "notifications": "Notifications",
+    "userProfile": "User profile",
+    "toggleNav": "Toggle navigation",
+    "goBack": "Go back",
+    "like": "Like",
+    "unlike": "Unlike",
+    "share": "Share",
+    "addToFavourites": "Add to favourites",
+    "removeFromFavourites": "Remove from favourites",
+    "viewGallery": "View gallery",
+    "filters": "Filters",
+    "zoom": "Zoom",
+    "download": "Download"
+  },
+  "hero": {
+    "location": "Colombia, South America",
+    "title": "Discover",
+    "titleHighlight": "Colombia",
+    "subtitle": "Breathtaking destinations, vibrant culture, and unforgettable experiences",
+    "searchPlaceholder": "Search destinations, regions…",
+    "stats": {
+      "destinations": "attractions",
+      "festivals": "festivals",
+      "dishes": "typical dishes"
+    }
+  },
+  "categories": {
+    "title": "Browse by Category",
+    "types": "{{count}} types",
+    "all": "All",
+    "beach": "Beaches",
+    "coast": "Coasts",
+    "jungle": "Jungle",
+    "history": "History"
+  },
+  "home": {
+    "popularDestinations": "Tourist Attractions",
+    "place_one": "{{count}} result",
+    "place_other": "{{count}} results",
+    "noDestinations": "No results found",
+    "noDestinationsHint": "Try a different category or search term",
+    "error": "Failed to load attractions",
+    "viewMore": "See {{count}} more destinations"
+  },
+  "locationCard": {
+    "gallery": "Gallery"
+  },
+  "locationDetail": {
+    "about": "Description",
+    "highlights": "Highlights",
+    "tags": {
+      "Nature": "Nature",
+      "Culture": "Culture",
+      "Adventure": "Adventure",
+      "Gastronomy": "Gastronomy",
+      "Photography": "Photography",
+      "Family-friendly": "Family-friendly"
+    },
+    "cityInfo": "City Info",
+    "city": "City",
+    "cityPopulation": "Population",
+    "cityArea": "Area",
+    "coordinates": "Coordinates",
+    "photos": "Photos",
+    "viewAll": "View all",
+    "viewGallery": "View Gallery",
+    "planVisit": "Plan My Visit",
+    "colombia": "Colombia",
+    "notFound": "Attraction not found",
+    "photosBy": "Photos:"
+  },
+  "gallery": {
+    "title": "Photo Gallery",
+    "destination": "Destination #{{id}}",
+    "photos": "{{count}} photos",
+    "noPhotos": "No photos found",
+    "noPhotosHint": "Try again later",
+    "photosBy": "Photos by"
+  },
+  "footer": {
+    "description": "Discover Colombia's best tourist destinations, festivals, and gastronomy.",
+    "nav": "Navigation",
+    "social": "Follow us",
+    "copyright": "© {{year}} Colombia Explorer. All rights reserved."
+  },
+  "language": {
+    "es": "ES",
+    "en": "EN"
+  }
+}
