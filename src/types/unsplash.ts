@@ -28,13 +28,5 @@ export interface UnsplashPhoto {
 
 /** Respuesta de búsqueda de la API de Unsplash. */
 export interface UnsplashSearchResponse {
-    total: number
-    totalPages: number
     results: UnsplashPhoto[]
-}
-
-/** Respuesta de error de la API de Unsplash. */
-export interface UnsplashError {
-    error: string
-    message?: string
 }

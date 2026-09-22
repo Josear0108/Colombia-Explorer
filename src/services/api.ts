@@ -1,22 +1,9 @@
-import axios from 'axios'
+import { createApiClient } from './createClient'
 import type { ApiAttraction, ApiPagedResponse, Location } from '../types'
 
 const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://api-colombia.com/api/v1'
 
-const api = axios.create({
-  baseURL: BASE_URL,
-  timeout: 15_000,
-  headers: { 'Content-Type': 'application/json' },
-})
-
-api.interceptors.response.use(
-  (response) => response.data,
-  (error: unknown) => {
-    const err = error as { response?: { data?: { message?: string } }; message?: string }
-    const message = err.response?.data?.message ?? err.message ?? 'Network error'
-    return Promise.reject(new Error(message))
-  }
-)
+const api = createApiClient(BASE_URL, 15_000)
 
 /** Map a raw API attraction to the app's Location type */
 export function mapAttraction(a: ApiAttraction): Location {
@@ -47,8 +34,10 @@ export const attractionsApi = {
     }) as unknown as Promise<ApiPagedResponse<ApiAttraction>>,
 
   /** Fetch single attraction by id — includes full city data */
-  getById: (id: string) =>
-    api.get(`/TouristicAttraction/${id}`) as unknown as Promise<ApiAttraction>,
+  getById: (id: string) => {
+    if (!/^\d+$/.test(id)) return Promise.reject(new Error('ID de atracción inválido'))
+    return api.get(`/TouristicAttraction/${encodeURIComponent(id)}`) as unknown as Promise<ApiAttraction>
+  },
 }
 
 export default api

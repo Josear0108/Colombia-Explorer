@@ -1,49 +1,26 @@
-const UTM = 'utm_source=colombia_explorer&utm_medium=referral'
-
-const CORS_HEADERS = {
-    'Access-Control-Allow-Origin': '*',
-    'Access-Control-Allow-Methods': 'GET, OPTIONS',
-    'Access-Control-Allow-Headers': 'Content-Type',
-}
-
-function mapPhoto(photo) {
-    return {
-        id: photo.id,
-        description: photo.description ?? photo.alt_description ?? null,
-        urls: photo.urls,
-        user: {
-            name: photo.user.name,
-            username: photo.user.username,
-            profileUrl: `${photo.user.links.html}?${UTM}`,
-        },
-        unsplashUrl: `${photo.links.html}?${UTM}`,
-        downloadLocation: photo.links.download_location,
-    }
-}
+import { mapPhoto, requireUnsplashKey, clampInt } from './_lib/unsplash.js'
 
 export default async function handler(req, res) {
-    // Preflight CORS
-    if (req.method === 'OPTIONS') {
-        return res.status(204).set(CORS_HEADERS).end()
+    if (req.method !== 'GET') {
+        return res.status(405).json({ message: 'Método no permitido' })
     }
 
-    Object.entries(CORS_HEADERS).forEach(([k, v]) => res.setHeader(k, v))
-
-    const { query, page = 1, per_page = 12 } = req.query
+    const { query, page, per_page } = req.query
 
     if (!query) {
         return res.status(400).json({ message: 'El parámetro query es requerido' })
     }
 
-    const key = process.env.UNSPLASH_ACCESS_KEY
-    if (!key) {
-        return res.status(500).json({ message: 'API key no configurada' })
-    }
+    const key = requireUnsplashKey(res)
+    if (!key) return
+
+    const safePage = clampInt(page, 1, 1000, 1)
+    const safePerPage = clampInt(per_page, 1, 30, 12)
 
     const url = new URL('https://api.unsplash.com/search/photos')
-    url.searchParams.set('query', query)
-    url.searchParams.set('page', String(page))
-    url.searchParams.set('per_page', String(per_page))
+    url.searchParams.set('query', Array.isArray(query) ? query[0] : query)
+    url.searchParams.set('page', String(safePage))
+    url.searchParams.set('per_page', String(safePerPage))
 
     try {
         const response = await fetch(url.toString(), {
@@ -51,21 +28,21 @@ export default async function handler(req, res) {
         })
 
         if (!response.ok) {
-            const errorData = await response.json().catch(() => ({}))
-            return res.status(response.status).json({
-                message: errorData.errors?.[0] ?? `Error de Unsplash: ${response.status}`,
-            })
+            console.error('[api/photos] Unsplash respondió:', response.status, await response.text().catch(() => ''))
+            return res.status(502).json({ message: 'Error al conectar con Unsplash' })
         }
 
         const data = await response.json()
 
+        // Cacheable en el CDN de Vercel: mismo query = misma respuesta por un buen rato.
+        // Reduce directamente el consumo de la cuota de Unsplash entre usuarios.
+        res.setHeader('Cache-Control', 'public, s-maxage=3600, stale-while-revalidate=86400')
+
         return res.status(200).json({
-            total: data.total,
-            totalPages: data.total_pages,
-            results: data.results.map(mapPhoto),
+            results: (data.results ?? []).map(mapPhoto),
         })
     } catch (error) {
         console.error('[api/photos] Error:', error)
-        return res.status(500).json({ message: 'Error al conectar con Unsplash' })
+        return res.status(502).json({ message: 'Error al conectar con Unsplash' })
     }
 }
