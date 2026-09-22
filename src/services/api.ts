@@ -5,6 +5,21 @@ const BASE_URL = import.meta.env.VITE_API_BASE_URL ?? 'https://api-colombia.com/
 
 const api = createApiClient(BASE_URL, 15_000)
 
+// Wikimedia solo sirve thumbnails en anchos estándar; los que trae API Colombia
+// (800px, 1024px…) responden 400. Se reescriben a 960px, que sí está permitido.
+const WIKIMEDIA_THUMB_WIDTH = /^(https:\/\/upload\.wikimedia\.org\/wikipedia\/commons\/thumb\/.+\/)\d+px-([^/]+)$/
+
+function normalizeImageUrl(url: string): string {
+  return url.replace(WIKIMEDIA_THUMB_WIDTH, '$1960px-$2')
+}
+
+/** Descarta entradas que no son URLs (API Colombia trae algunas como texto de búsqueda de Google Imágenes). */
+function mapImages(images: string[] | null | undefined): string[] {
+  return (images ?? [])
+    .filter((url) => /^https?:\/\//.test(url))
+    .map(normalizeImageUrl)
+}
+
 /** Map a raw API attraction to the app's Location type */
 export function mapAttraction(a: ApiAttraction): Location {
   return {
@@ -12,7 +27,7 @@ export function mapAttraction(a: ApiAttraction): Location {
     name: a.name,
     region: a.city?.name ?? '',
     description: a.description,
-    images: a.images ?? [],
+    images: mapImages(a.images),
     latitude: a.latitude ?? undefined,
     longitude: a.longitude ?? undefined,
     cityPopulation: a.city?.population,
