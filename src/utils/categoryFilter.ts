@@ -1,6 +1,6 @@
 import type { Location } from '../types'
 
-export const CATEGORY_KEYWORDS: Record<string, RegExp> = {
+const CATEGORY_KEYWORDS: Record<string, RegExp> = {
   beach:   /\bplaya\b|\bisla\b|\barrecife\b|\bbuceo\b|\bsnorkel\b|\bcoral\b/i,
   coast:   /\bcartagena\b|\bbarranquilla\b|\bsanta marta\b|\bamurallada\b|\blitoral\b|\bpuerto\b/i,
   jungle:  /\bselva\b|\bparque nacional\b|\bbosque\b|\btayrona\b|\bsierra nevada\b|\breserva natural\b|\bguácharo\b|\bcueva\b|\bamazon/i,

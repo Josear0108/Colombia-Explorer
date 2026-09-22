@@ -4,23 +4,16 @@
   },
   "nav": {
     "home": "Home",
-    "destinations": "Destinations",
-    "experiences": "Experiences",
-    "about": "About"
+    "destinations": "Destinations"
   },
   "aria": {
-    "notifications": "Notifications",
-    "userProfile": "User profile",
     "toggleNav": "Toggle navigation",
     "goBack": "Go back",
     "like": "Like",
     "unlike": "Unlike",
-    "share": "Share",
     "addToFavourites": "Add to favourites",
     "removeFromFavourites": "Remove from favourites",
     "viewGallery": "View gallery",
-    "filters": "Filters",
-    "zoom": "Zoom",
     "download": "Download"
   },
   "hero": {
@@ -58,15 +51,6 @@
   },
   "locationDetail": {
     "about": "Description",
-    "highlights": "Highlights",
-    "tags": {
-      "Nature": "Nature",
-      "Culture": "Culture",
-      "Adventure": "Adventure",
-      "Gastronomy": "Gastronomy",
-      "Photography": "Photography",
-      "Family-friendly": "Family-friendly"
-    },
     "cityInfo": "City Info",
     "city": "City",
     "cityPopulation": "Population",
@@ -75,7 +59,6 @@
     "photos": "Photos",
     "viewAll": "View all",
     "viewGallery": "View Gallery",
-    "planVisit": "Plan My Visit",
     "colombia": "Colombia",
     "notFound": "Attraction not found",
     "photosBy": "Photos:"
@@ -86,16 +69,22 @@
     "photos": "{{count}} photos",
     "noPhotos": "No photos found",
     "noPhotosHint": "Try again later",
+    "error": "Failed to load photos",
+    "errorHint": "Please try again later",
     "photosBy": "Photos by"
   },
   "footer": {
     "description": "Discover Colombia's best tourist destinations, festivals, and gastronomy.",
     "nav": "Navigation",
-    "social": "Follow us",
     "copyright": "© {{year}} Colombia Explorer. All rights reserved."
   },
   "language": {
     "es": "ES",
     "en": "EN"
+  },
+  "notFound": {
+    "title": "Page not found",
+    "hint": "The page you're looking for doesn't exist or was moved.",
+    "cta": "Back to home"
   }
 }

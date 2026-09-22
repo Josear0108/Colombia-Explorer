@@ -1,25 +1,19 @@
 import { useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
-import { ArrowLeft, MapPin, Heart, Share2, Camera, Users, Globe, ChevronRight } from 'lucide-react'
+import { ArrowLeft, MapPin, Heart, Camera, Users, Globe, ChevronRight } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import Button from '../components/ui/Button'
 import Loader from '../components/ui/Loader'
 import { useLocation } from '../hooks/useLocations'
 import { useUnsplashPhotos } from '../hooks/useUnsplashPhotos'
 import { useAppStore } from '../store/useAppStore'
-
-const HIGHLIGHT_TAGS: { key: string; className: string }[] = [
-  { key: 'Nature',          className: 'bg-selva/10 text-selva border border-selva/20'             },
-  { key: 'Culture',         className: 'bg-gold/15 text-amber-800 border border-gold/30'           },
-  { key: 'Adventure',       className: 'bg-primary/10 text-primary border border-primary/20'       },
-  { key: 'Gastronomy',      className: 'bg-crimson/10 text-crimson border border-crimson/20'       },
-  { key: 'Photography',     className: 'bg-purple-100 text-purple-700 border border-purple-200'    },
-  { key: 'Family-friendly', className: 'bg-orange-100 text-orange-700 border border-orange-200'   },
-]
+import { UNSPLASH_ATTRIBUTION_URL } from '../constants/unsplash'
 
 function formatCoords(lat?: string, lng?: string) {
-  if (!lat || !lng) return '—'
-  return `${parseFloat(lat).toFixed(2)}° / ${parseFloat(lng).toFixed(2)}°`
+  const latNum = parseFloat(lat ?? '')
+  const lngNum = parseFloat(lng ?? '')
+  if (!Number.isFinite(latNum) || !Number.isFinite(lngNum)) return '—'
+  return `${latNum.toFixed(2)}° / ${lngNum.toFixed(2)}°`
 }
 
 export default function LocationDetail() {
@@ -34,7 +28,7 @@ export default function LocationDetail() {
   const liked = id ? favouriteIds.has(id) : false
 
   const [heroImgError, setHeroImgError] = useState(false)
-  const { photos: allUnsplashPhotos, loading: photosLoading } = useUnsplashPhotos(cachedName ?? location?.name, 12)
+  const { photos: allUnsplashPhotos, loading: photosLoading, error: photosError } = useUnsplashPhotos(cachedName ?? location?.name, 12)
   const unsplashPhotos = allUnsplashPhotos.slice(0, 4)
   const primaryHeroImg = location?.images[0]
   const heroSrc = primaryHeroImg && !heroImgError
@@ -105,12 +99,6 @@ export default function LocationDetail() {
             >
               <Heart size={18} className={liked ? 'text-red-500 fill-red-500' : 'text-gray-700'} />
             </button>
-            <button
-              aria-label={t('aria.share')}
-              className="w-10 h-10 rounded-full bg-white/90 backdrop-blur flex items-center justify-center shadow-sm"
-            >
-              <Share2 size={18} className="text-gray-700" />
-            </button>
           </div>
         </div>
 
@@ -157,18 +145,6 @@ export default function LocationDetail() {
                 <p className="text-gray-600 text-sm leading-relaxed">{location.description}</p>
               </div>
             )}
-
-            {/* Highlights */}
-            <div className="bg-white rounded-2xl p-5 border border-gray-100">
-              <h2 className="font-bold text-gray-900 mb-3">{t('locationDetail.highlights')}</h2>
-              <div className="flex flex-wrap gap-2">
-                {HIGHLIGHT_TAGS.map(({ key, className }) => (
-                  <span key={key} className={`px-3 py-1 rounded-full text-xs font-semibold ${className}`}>
-                    {t(`locationDetail.tags.${key}`, { defaultValue: key })}
-                  </span>
-                ))}
-              </div>
-            </div>
           </div>
 
           {/* ── Right / sidebar ────────────────────────────────────── */}
@@ -220,6 +196,12 @@ export default function LocationDetail() {
                       className={`rounded-xl bg-gray-200 animate-pulse ${i === 0 ? 'col-span-2 h-32' : 'h-20'}`}
                     />
                   ))
+                  : photosError
+                  ? (
+                    <p className="col-span-2 text-xs text-gray-400 py-4 text-center">
+                      {t('gallery.error')}
+                    </p>
+                  )
                   : unsplashPhotos.map((photo, i) => (
                     <div
                       key={photo.id}
@@ -236,11 +218,11 @@ export default function LocationDetail() {
                 }
               </div>
 
-              {!photosLoading && unsplashPhotos.length > 0 && (
+              {!photosLoading && !photosError && unsplashPhotos.length > 0 && (
                 <p className="text-xs text-gray-400 mt-2 text-right">
                   {t('locationDetail.photosBy')}{' '}
                   <a
-                    href="https://unsplash.com/?utm_source=colombia_explorer&utm_medium=referral"
+                    href={UNSPLASH_ATTRIBUTION_URL}
                     target="_blank"
                     rel="noopener noreferrer"
                     className="underline"
@@ -255,9 +237,6 @@ export default function LocationDetail() {
             <Button className="w-full" size="lg" onClick={() => navigate(`/gallery/${id}`)}>
               {t('locationDetail.viewGallery')}
               <ChevronRight size={18} />
-            </Button>
-            <Button variant="secondary" className="w-full" size="lg">
-              {t('locationDetail.planVisit')}
             </Button>
           </div>
         </div>

@@ -6,6 +6,7 @@ import { useUnsplashPhotos } from '../hooks/useUnsplashPhotos'
 import { useAppStore } from '../store/useAppStore'
 import { unsplashApi } from '../services/unsplashApi'
 import type { UnsplashPhoto } from '../types/unsplash'
+import { UNSPLASH_ATTRIBUTION_URL } from '../constants/unsplash'
 
 // Indices que ocupan 2 columnas para dar variedad visual al grid
 const WIDE_INDICES = new Set([0, 6, 11])
@@ -20,12 +21,13 @@ function PhotoCard({ photo, locationName, index }: PhotoCardProps) {
   const { t } = useTranslation()
   const isWide = WIDE_INDICES.has(index)
 
-  const handleDownload = async () => {
-    try {
-      await unsplashApi.trackDownload(photo.downloadLocation)
-    } catch {
-      // silencioso — el tracking no bloquea la descarga
-    }
+  const handleDownload = () => {
+    // No se espera el tracking: un `await` acá pierde el user-activation gesture
+    // del clic y el navegador bloquea el popup de window.open. El tracking no debe
+    // bloquear la descarga, pero si falla sistemáticamente sí queremos enterarnos
+    // (Unsplash lo exige por ToS).
+    unsplashApi.trackDownload(photo.downloadLocation)
+      .catch((err) => console.error('Gallery: fallo el tracking de descarga en Unsplash', err))
     window.open(photo.urls.full, '_blank', 'noopener,noreferrer')
   }
 
@@ -111,7 +113,7 @@ export default function Gallery() {
   const { location, loading: locationLoading } = useLocation(id)
   const cachedName = useAppStore((s) => s.locations.find((l) => l.id === id)?.name)
   const query = cachedName ?? location?.name
-  const { photos, loading: photosLoading } = useUnsplashPhotos(query)
+  const { photos, loading: photosLoading, error: photosError } = useUnsplashPhotos(query)
 
   const loading = locationLoading || photosLoading
 
@@ -145,6 +147,11 @@ export default function Gallery() {
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
         {loading ? (
           <SkeletonGrid />
+        ) : photosError ? (
+          <div className="flex flex-col items-center justify-center py-24 text-gray-400 gap-2">
+            <p className="text-base font-semibold">{t('gallery.error')}</p>
+            <p className="text-sm">{t('gallery.errorHint')}</p>
+          </div>
         ) : photos.length === 0 ? (
           <div className="flex flex-col items-center justify-center py-24 text-gray-400 gap-2">
             <p className="text-base font-semibold">{t('gallery.noPhotos')}</p>
@@ -167,7 +174,7 @@ export default function Gallery() {
             <p className="text-center text-xs text-gray-400 mt-6">
               {t('gallery.photosBy')}{' '}
               <a
-                href="https://unsplash.com/?utm_source=colombia_explorer&utm_medium=referral"
+                href={UNSPLASH_ATTRIBUTION_URL}
                 target="_blank"
                 rel="noopener noreferrer"
                 className="underline hover:text-gray-600"

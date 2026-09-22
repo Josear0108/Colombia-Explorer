@@ -19,28 +19,13 @@ function saveFavourites(ids: Set<string>) {
 }
 
 interface AppState {
-  selectedCategory: string
-  setSelectedCategory: (category: string) => void
-  searchQuery: string
-  setSearchQuery: (query: string) => void
   locations: Location[]
   setLocations: (locations: Location[]) => void
   favouriteIds: Set<string>
   toggleFavourite: (id: string) => void
-  isLoading: boolean
-  setLoading: (isLoading: boolean) => void
-  error: string | null
-  setError: (error: string | null) => void
-  clearError: () => void
 }
 
 export const useAppStore = create<AppState>((set) => ({
-  selectedCategory: 'all',
-  setSelectedCategory: (category) => set({ selectedCategory: category }),
-
-  searchQuery: '',
-  setSearchQuery: (query) => set({ searchQuery: query }),
-
   locations: [],
   setLocations: (locations) => set({ locations }),
 
@@ -48,17 +33,11 @@ export const useAppStore = create<AppState>((set) => ({
   toggleFavourite: (id) =>
     set((state) => {
       const next = new Set(state.favouriteIds)
-      next.has(id) ? next.delete(id) : next.add(id)
+      if (next.has(id)) next.delete(id)
+      else next.add(id)
       saveFavourites(next)
       return { favouriteIds: next }
     }),
-
-  isLoading: false,
-  setLoading: (isLoading) => set({ isLoading }),
-
-  error: null,
-  setError: (error) => set({ error }),
-  clearError: () => set({ error: null }),
 }))
 
 export default useAppStore

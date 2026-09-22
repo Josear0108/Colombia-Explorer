@@ -4,6 +4,7 @@ import Home from './pages/Home'
 import Destinations from './pages/Destinations'
 import LocationDetail from './pages/LocationDetail'
 import Gallery from './pages/Gallery'
+import NotFound from './pages/NotFound'
 
 export default function App() {
   return (
@@ -12,6 +13,7 @@ export default function App() {
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
           <Route path="destinations" element={<Destinations />} />
+          <Route path="*" element={<NotFound />} />
         </Route>
         <Route path="/location/:id" element={<LocationDetail />} />
         <Route path="/gallery/:id"  element={<Gallery />} />

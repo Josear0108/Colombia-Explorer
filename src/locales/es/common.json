@@ -4,23 +4,16 @@
   },
   "nav": {
     "home": "Inicio",
-    "destinations": "Destinos",
-    "experiences": "Experiencias",
-    "about": "Nosotros"
+    "destinations": "Destinos"
   },
   "aria": {
-    "notifications": "Notificaciones",
-    "userProfile": "Perfil de usuario",
     "toggleNav": "Abrir menú",
     "goBack": "Volver",
     "like": "Me gusta",
     "unlike": "Ya no me gusta",
-    "share": "Compartir",
     "addToFavourites": "Agregar a favoritos",
     "removeFromFavourites": "Quitar de favoritos",
     "viewGallery": "Ver galería",
-    "filters": "Filtros",
-    "zoom": "Ampliar",
     "download": "Descargar"
   },
   "hero": {
@@ -58,15 +51,6 @@
   },
   "locationDetail": {
     "about": "Descripción",
-    "highlights": "Destacados",
-    "tags": {
-      "Nature": "Naturaleza",
-      "Culture": "Cultura",
-      "Adventure": "Aventura",
-      "Gastronomy": "Gastronomía",
-      "Photography": "Fotografía",
-      "Family-friendly": "Apto para familias"
-    },
     "cityInfo": "Info de la Ciudad",
     "city": "Ciudad",
     "cityPopulation": "Habitantes",
@@ -75,7 +59,6 @@
     "photos": "Fotos",
     "viewAll": "Ver todas",
     "viewGallery": "Ver Galería",
-    "planVisit": "Planear mi visita",
     "colombia": "Colombia",
     "notFound": "Atracción no encontrada",
     "photosBy": "Fotos:"
@@ -86,16 +69,22 @@
     "photos": "{{count}} fotos",
     "noPhotos": "No se encontraron fotos",
     "noPhotosHint": "Intenta más tarde",
+    "error": "Error al cargar las fotos",
+    "errorHint": "Intenta de nuevo más tarde",
     "photosBy": "Fotos de"
   },
   "footer": {
     "description": "Descubre los mejores destinos turísticos, festivales y gastronomía de Colombia.",
     "nav": "Navegación",
-    "social": "Síguenos",
     "copyright": "© {{year}} Colombia Explorer. Todos los derechos reservados."
   },
   "language": {
     "es": "ES",
     "en": "EN"
+  },
+  "notFound": {
+    "title": "Página no encontrada",
+    "hint": "La página que buscás no existe o fue movida.",
+    "cta": "Volver al inicio"
   }
 }

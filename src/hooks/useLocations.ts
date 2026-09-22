@@ -8,7 +8,6 @@ export function useLocations() {
   const locations = useAppStore((s) => s.locations)
   const setLocations = useAppStore((s) => s.setLocations)
 
-  const [total, setTotal] = useState(0)
   const [loading, setLoading] = useState(locations.length === 0)
   const [error, setError] = useState<string | null>(null)
 
@@ -18,10 +17,7 @@ export function useLocations() {
     setLoading(true)
     attractionsApi.getAll(1, 50)
       .then((res) => {
-        if (!cancelled) {
-          setLocations(res.data.map(mapAttraction))
-          setTotal(res.totalRecords)
-        }
+        if (!cancelled) setLocations(res.data.map(mapAttraction))
       })
       .catch((err) => {
         if (!cancelled) setError(err instanceof Error ? err.message : 'Error')
@@ -30,9 +26,13 @@ export function useLocations() {
         if (!cancelled) setLoading(false)
       })
     return () => { cancelled = true }
+    // Deliberately runs once: `locations`/`setLocations` come from the Zustand
+    // store (stable across renders), and the `locations.length > 0` guard above
+    // prevents refetching once cached.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
-  return { locations, total, loading, error }
+  return { locations, loading, error }
 }
 
 /** Fetch a single attraction by id — includes full city data. Used in LocationDetail and Gallery. */

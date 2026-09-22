@@ -43,17 +43,7 @@ export interface Location {
   citySurface?: number
 }
 
-export type LocationDetail = Location
-
-export interface GalleryPhoto {
-  id: string
-  url: string
-  alt?: string
-  locationId: string
-}
-
 // ─── UI variants ──────────────────────────────────────────────────────────────
 
-export type BadgeVariant = 'primary' | 'yellow' | 'green' | 'red' | 'gray'
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost'
 export type ButtonSize = 'sm' | 'md' | 'lg'

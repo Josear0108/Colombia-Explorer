@@ -1,20 +1,9 @@
 import { useState } from 'react'
-import { Bell, Menu, X } from 'lucide-react'
+import { Menu, X } from 'lucide-react'
 import { Link, NavLink } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import LanguageSwitcher from '../ui/LanguageSwitcher'
-
-interface NavItem {
-  to: string
-  key: string
-}
-
-const NAV_ITEMS: NavItem[] = [
-  { to: '/', key: 'nav.home' },
-  { to: '/destinations', key: 'nav.destinations' },
-  { to: '/', key: 'nav.experiences' },
-  { to: '/', key: 'nav.about' },
-]
+import { NAV_ITEMS } from '../../config/navigation'
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false)
@@ -22,10 +11,10 @@ export default function Header() {
 
   return (
     <header className="fixed top-0 left-0 right-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-100">
-      <div className="max-w-7xl mx-auto flex items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
+      <div className="max-w-7xl mx-auto flex md:grid md:grid-cols-3 items-center justify-between px-4 sm:px-6 lg:px-8 h-16">
 
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0">
+        <Link to="/" className="flex items-center gap-2 shrink-0 min-w-0 md:justify-self-start">
           <img src="/logo-colombia-explorer.png" alt="" className="w-8 h-8 object-contain shrink-0" />
           {/* Text hidden on small screens to prevent overflow */}
           <span className="hidden sm:block text-base font-black tracking-widest text-gray-900 uppercase truncate">
@@ -33,8 +22,8 @@ export default function Header() {
           </span>
         </Link>
 
-        {/* Desktop nav */}
-        <nav className="hidden md:flex items-center gap-1">
+        {/* Desktop nav — centered independently of logo/actions width */}
+        <nav className="hidden md:flex items-center justify-center gap-1 md:justify-self-center">
           {NAV_ITEMS.map(({ to, key }) => (
             <NavLink
               key={key}
@@ -54,24 +43,8 @@ export default function Header() {
         </nav>
 
         {/* Right actions */}
-        <div className="flex items-center gap-1.5">
+        <div className="flex items-center gap-1.5 md:justify-self-end">
           <LanguageSwitcher />
-
-          {/* Bell + Avatar — desktop only */}
-          <button
-            aria-label={t('aria.notifications')}
-            className="relative p-2 rounded-full hover:bg-gray-100 transition-colors hidden md:flex"
-          >
-            <Bell size={20} className="text-gray-700" />
-            <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full ring-2 ring-white" />
-          </button>
-
-          <button
-            aria-label={t('aria.userProfile')}
-            className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dark items-center justify-center text-white font-bold text-sm shadow-sm hidden md:flex"
-          >
-            U
-          </button>
 
           {/* Hamburger — mobile only */}
           <button
@@ -107,23 +80,6 @@ export default function Header() {
               {t(key)}
             </NavLink>
           ))}
-
-          {/* Bell + Avatar in drawer on mobile */}
-          <div className="flex items-center gap-3 px-4 pt-3 mt-1 border-t border-gray-100">
-            <button
-              aria-label={t('aria.notifications')}
-              className="relative p-2 rounded-full hover:bg-gray-100 transition-colors"
-            >
-              <Bell size={20} className="text-gray-700" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-primary rounded-full ring-2 ring-white" />
-            </button>
-            <button
-              aria-label={t('aria.userProfile')}
-              className="w-9 h-9 rounded-full bg-gradient-to-br from-primary to-primary-dark flex items-center justify-center text-white font-bold text-sm shadow-sm"
-            >
-              U
-            </button>
-          </div>
         </div>
       )}
     </header>

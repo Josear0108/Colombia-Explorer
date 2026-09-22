@@ -20,8 +20,8 @@ export function useHeroStats() {
       fetchTotalCount('TypicalDish'),
     ]).then(([attractions, festivals, dishes]) => {
       setStats({ attractions, festivals, dishes })
-    }).catch(() => {
-      // silently keep defaults on error
+    }).catch((err) => {
+      console.error('useHeroStats: failed to fetch stats from API, using defaults', err)
     })
   }, [])
 

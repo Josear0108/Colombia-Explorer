@@ -1,5 +1,5 @@
 import { useState } from 'react'
-import { Search, MapPin, SlidersHorizontal } from 'lucide-react'
+import { Search, MapPin } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import CountUp from '../ui/CountUp'
 
@@ -90,13 +90,6 @@ export default function HeroSection({ onSearch, totalAttractions, totalFestivals
             placeholder={t('hero.searchPlaceholder')}
             className="flex-1 text-sm text-gray-800 placeholder-gray-400 outline-none bg-transparent"
           />
-          <button
-            type="button"
-            aria-label={t('aria.filters')}
-            className="p-1.5 rounded-xl bg-primary/10 text-primary shrink-0"
-          >
-            <SlidersHorizontal size={16} />
-          </button>
         </form>
 
         {/* Stats */}

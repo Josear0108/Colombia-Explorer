@@ -1,11 +1,10 @@
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { MapPin, Heart, Camera } from 'lucide-react'
 import { useTranslation } from 'react-i18next'
 import { motion } from 'motion/react'
 import type { Location } from '../../types'
 import { useAppStore } from '../../store/useAppStore'
-import { unsplashApi } from '../../services/unsplashApi'
 
 interface LocationCardProps {
   location: Location
@@ -14,7 +13,6 @@ interface LocationCardProps {
 
 export default function LocationCard({ location, index = 0 }: LocationCardProps) {
   const [imgError, setImgError] = useState(false)
-  const [unsplashSrc, setUnsplashSrc] = useState<string | null>(null)
   const navigate = useNavigate()
   const { t } = useTranslation()
   const favouriteIds = useAppStore((s) => s.favouriteIds)
@@ -24,15 +22,10 @@ export default function LocationCard({ location, index = 0 }: LocationCardProps)
   const { id, name, region, images, description } = location
   const primaryImage = images[0]
 
-  // Fetch Unsplash fallback only when apiColombia has no image or it failed
-  useEffect(() => {
-    if (primaryImage && !imgError) return
-    unsplashApi.searchPhotos(`${name} Colombia`, 1, 1)
-      .then(res => setUnsplashSrc(res.results[0]?.urls?.regular ?? null))
-      .catch(() => setUnsplashSrc(null))
-  }, [name, primaryImage, imgError])
-
-  const displaySrc = primaryImage && !imgError ? primaryImage : unsplashSrc
+  // Sin fallback a Unsplash por card: con hasta 50 cards por página, una búsqueda
+  // por card agota la cuota horaria de Unsplash en una sola visita a /destinations.
+  // Si no hay imagen de API Colombia, se muestra el gradiente placeholder de abajo.
+  const displaySrc = primaryImage && !imgError ? primaryImage : null
 
   return (
     <motion.div
@@ -51,10 +44,7 @@ export default function LocationCard({ location, index = 0 }: LocationCardProps)
             src={displaySrc}
             alt={name}
             className="w-full h-full object-cover"
-            onError={() => {
-              if (!imgError) setImgError(true)
-              else setUnsplashSrc(null)
-            }}
+            onError={() => setImgError(true)}
           />
         )}
 

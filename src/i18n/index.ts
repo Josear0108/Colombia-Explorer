@@ -20,6 +20,9 @@ i18n
       caches: ['localStorage'],
     },
     interpolation: {
+      // Seguro hoy porque las traducciones solo se renderizan como children de React
+      // (que escapa por defecto) y no se usa <Trans> ni dangerouslySetInnerHTML.
+      // Si se agrega cualquiera de los dos, volver a evaluar esta bandera.
       escapeValue: false,
     },
   })

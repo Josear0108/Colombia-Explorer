@@ -12,7 +12,12 @@ export function useUnsplashPhotos(query: string | undefined, perPage = 12) {
     const [error, setError] = useState<string | null>(null)
 
     useEffect(() => {
-        if (!query) return
+        if (!query) {
+            setPhotos([])
+            setLoading(false)
+            setError(null)
+            return
+        }
         let cancelled = false
         setLoading(true)
         setError(null)
@@ -22,6 +27,7 @@ export function useUnsplashPhotos(query: string | undefined, perPage = 12) {
                 if (!cancelled) setPhotos(res.results ?? [])
             })
             .catch((err) => {
+                console.error('useUnsplashPhotos: failed to fetch photos from Unsplash', err)
                 if (!cancelled) setError(err instanceof Error ? err.message : 'Error cargando fotos')
             })
             .finally(() => {
